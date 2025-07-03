@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Started with RupiahFlow</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        /* Additional styles for the start page */
+        .progress-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        
+        .progress-bar::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: var(--border-color);
+            z-index: 1;
+        }
+        
+        .progress-step {
+            position: relative;
+            z-index: 2;
+            background-color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            border: 2px solid var(--border-color);
+        }
+        
+        .progress-step.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .progress-step.completed {
+            background-color: var(--success-color);
+            color: white;
+            border-color: var(--success-color);
+        }
+        
+        .step-content {
+            display: none;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        .step-content.active {
+            display: block;
+        }
+        
+        .role-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .role-card {
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .role-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--box-shadow);
+        }
+        
+        .role-card.selected {
+            border-color: var(--primary-color);
+            background-color: var(--primary-light);
+        }
+        
+        .role-icon {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .upload-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .upload-option {
+            border: 2px dashed var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 2rem 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .upload-option:hover {
+            border-color: var(--primary-color);
+            background-color: var(--primary-light);
+        }
+        
+        .upload-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .invoice-form {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 2rem;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-family: inherit;
+            font-size: 1rem;
+        }
+        
+        .funding-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .funding-option {
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+        
+        .funding-option:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--box-shadow);
+        }
+        
+        .funding-option.selected {
+            border-color: var(--primary-color);
+            background-color: var(--primary-light);
+        }
+        
+        .funding-option-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .funding-option-badge {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .funding-option-details {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+        
+        .detail-row .value {
+            font-weight: 600;
+        }
+        
+        .wallet-tabs {
+            display: flex;
+            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 1.5rem;
+        }
+        
+        .wallet-tab {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            border-bottom: 3px solid transparent;
+            transition: var(--transition);
+        }
+        
+        .wallet-tab.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .wallet-info {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 2rem;
+        }
+        
+        .wallet-balance {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .wallet-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .ledger-entries {
+            margin-top: 2rem;
+        }
+        
+        .ledger-entry {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .ledger-entry:last-child {
+            border-bottom: none;
+        }
+        
+        .entry-details {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .entry-title {
+            font-weight: 600;
+        }
+        
+        .entry-date {
+            font-size: 0.9rem;
+            color: var(--gray-color);
+        }
+        
+        .entry-amount {
+            font-weight: 600;
+        }
+        
+        .entry-amount.positive {
+            color: var(--success-color);
+        }
+        
+        .entry-amount.negative {
+            color: var(--danger-color);
+        }
+        
+        .bank-connect {
+            background-color: var(--light-color);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+        
+        .bank-connect-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .signup-form {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 2rem;
+        }
+        
+        .success-message {
+            background-color: var(--success-color);
+            color: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        .success-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        
+        .success-details {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            text-align: left;
+        }
+        
+        .success-detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .success-detail-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .faq-section {
+            margin-top: 3rem;
+        }
+        
+        .faq-item {
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 1rem;
+        }
+        
+        .faq-question {
+            padding: 1rem 0;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+        }
+        
+        .faq-answer {
+            padding: 0 0 1rem;
+            display: none;
+        }
+        
+        .faq-answer.active {
+            display: block;
+        }
+        
+        .partner-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+        
+        .partner-logo {
+            height: 40px;
+            opacity: 0.7;
+            transition: var(--transition);
+        }
+        
+        .partner-logo:hover {
+            opacity: 1;
+        }
+        
+        .selected-funding-summary {
+            background-color: var(--primary-light);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .confirmation-screen {
+            text-align: center;
+            padding: 3rem 0;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        .confirmation-icon {
+            font-size: 5rem;
+            color: var(--success-color);
+            margin-bottom: 2rem;
+        }
+        
+        .transfer-details {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--box-shadow);
+            margin: 2rem auto;
+            max-width: 600px;
+            text-align: left;
+        }
+        
+        .transfer-detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .transfer-detail-row:last-child {
+            border-bottom: none;
+        }
+        
+        .transfer-detail-label {
+            color: var(--gray-color);
+        }
+        
+        .transfer-detail-value {
+            font-weight: 600;
+        }
+        
+        .transfer-status {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            background-color: var(--primary-light);
+            color: var(--primary-color);
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .wallet-tabs {
+                flex-direction: column;
+                border-bottom: none;
+            }
+            
+            .wallet-tab {
+                border-bottom: 1px solid var(--border-color);
+            }
+            
+            .wallet-tab.active {
+                border-bottom: 1px solid var(--primary-color);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <span>RupiahFlow</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html#why-rupiahflow">Why RupiahFlow</a></li>
+                    <li><a href="index.html#who-its-for">Who It's For</a></li>
+                    <li><a href="index.html#how-it-works">How It Works</a></li>
+                    <li><a href="index.html#benefits">Benefits</a></li>
+                    <li><a href="index.html#security">Security</a></li>
+                </ul>
+                <div class="cta-button">
+                    <a href="index.html" class="btn btn-secondary">Back to Home</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="container" style="padding: 4rem 0;">
+            <h1 class="section-title">Get Started with RupiahFlow</h1>
+            <p class="section-subtitle">Complete these steps to start using RupiahFlow for your business</p>
+            
+            <div class="progress-bar">
+                <div class="progress-step active" id="step-1">1</div>
+                <div class="progress-step" id="step-2">2</div>
+                <div class="progress-step" id="step-3">3</div>
+                <div class="progress-step" id="step-4">4</div>
+                <div class="progress-step" id="step-5">5</div>
+            </div>
+            
+            <!-- Step 1: Select Your Role -->
+            <div class="step-content active" id="step-1-content">
+                <h2>Select Your Role</h2>
+                <p>Choose the option that best describes your business:</p>
+                
+                <div class="role-cards">
+                    <div class="role-card" data-role="freelancer">
+                        <div class="role-icon">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
+                        <h3>Freelancer</h3>
+                        <p>Independent professional providing services to clients</p>
+                    </div>
+                    
+                    <div class="role-card" data-role="small-business">
+                        <div class="role-icon">
+                            <i class="fas fa-store"></i>
+                        </div>
+                        <h3>Small Business</h3>
+                        <p>Company with 1-10 employees serving customers</p>
+                    </div>
+                    
+                    <div class="role-card" data-role="agency">
+                        <div class="role-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3>Agency</h3>
+                        <p>Service-based business with multiple team members</p>
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <button class="btn btn-primary btn-large" id="step-1-continue" disabled>Continue</button>
+                </div>
+            </div>
+            
+            <!-- Step 2: Upload Invoice -->
+            <div class="step-content" id="step-2-content">
+                <h2>Upload Your Invoice</h2>
+                <p>Select how you'd like to submit your invoice:</p>
+                
+                <div class="upload-options">
+                    <div class="upload-option" id="upload-file">
+                        <div class="upload-icon">
+                            <i class="fas fa-file-upload"></i>
+                        </div>
+                        <h3>Upload File</h3>
+                        <p>PDF, DOC, or image file</p>
+                    </div>
+                    
+                    <div class="upload-option" id="manual-entry">
+                        <div class="upload-icon">
+                            <i class="fas fa-edit"></i>
+                        </div>
+                        <h3>Manual Entry</h3>
+                        <p>Fill out invoice details</p>
+                    </div>
+                    
+                    <div class="upload-option" id="connect-accounting">
+                        <div class="upload-icon">
+                            <i class="fas fa-plug"></i>
+                        </div>
+                        <h3>Connect Software</h3>
+                        <p>Import from accounting software</p>
+                    </div>
+                </div>
+                
+                <div class="invoice-form" id="manual-invoice-form">
+                    <h3>Invoice Details</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="client-name">Client Name</label>
+                            <input type="text" id="client-name" value="PT Maju Bersama" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="invoice-number">Invoice Number</label>
+                            <input type="text" id="invoice-number" value="INV-2023-001" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="invoice-date">Invoice Date</label>
+                            <input type="date" id="invoice-date" value="2023-11-15" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="due-date">Due Date</label>
+                            <input type="date" id="due-date" value="2023-12-15" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="invoice-amount">Invoice Amount (IDR)</label>
+                        <input type="number" id="invoice-amount" value="10000000" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="invoice-description">Description</label>
+                        <textarea id="invoice-description" rows="3" required>Website development services for corporate website redesign.</textarea>
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <button class="btn btn-secondary" id="step-2-back">Back</button>
+                    <button class="btn btn-primary btn-large" id="step-2-continue">Continue</button>
+                </div>
+            </div>
+            
+            <!-- Step 3: Select Funding Option -->
+            <div class="step-content" id="step-3-content">
+                <h2>Select Your Funding Option</h2>
+                <p>Choose how you'd like to receive funds for your invoice:</p>
+                
+                <div class="funding-options">
+                    <div class="funding-option" data-option="standard">
+                        <div class="funding-option-header">
+                            <h3>Standard Advance</h3>
+                            <span class="funding-option-badge">Most Popular</span>
+                        </div>
+                        <p>Get 80% of your invoice value upfront</p>
+                        
+                        <div class="funding-option-details">
+                            <div class="detail-row">
+                                <span>Advance Rate:</span>
+                                <span class="value">80%</span>
+                            </div>
+                            <div class="detail-row">
+                                <span>Fee:</span>
+                                <span class="value">3%</span>
+                            </div>
+                            <div class="detail-row">
+                                <span>You Receive Today:</span>
+                                <span class="value">Rp 8,000,000</span>
+                            </div>
+                            <div class="detail-row">
+                                <span>Remaining on Payment:</span>
+                                <span class="value">Rp 1,700,000</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="funding-option" data-option="maximum">
+                        <div class="funding-option-header">
+                            <h3>Maximum Advance</h3>
+                            <span class="funding-option-badge">Highest Liquidity</span>
+                        </div>
+                        <p>Get 90% of your invoice value upfront</p>
+                        
+                        <div class="funding-option-details">
+                            <div class="detail-row">
+                                <span>Advance Rate:</span>
+                                <span class="value">90%</span>
+                            </div>
+                            <div class="detail-row">
+                                <span>Fee:</span>
+                                <span class="value">4.5%</span>
+                            </div>
+                            <div class="detail-row">
+                                <span>You Receive Today:</span>
+                                <span class="value">Rp 9,000,000</span>
+                            </div>
+                            <div class="detail-row">
+                                <span>Remaining on Payment:</span>
+                                <span class="value">Rp 550,000</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="funding-option" data-option="flexible">
+                        <div class="funding-option-header">
+                            <h3>Flexible Split</h3>
+                            <span class="funding-option-badge">Lowest Fee</span>
+                        </div>
+                        <p>Get 70% of your invoice value upfront</p>
+                        
+                        <div class="funding-option-details">
+                            <div class="detail-row">
+                                <span>Advance Rate:</span>
+                                <span class="value">70%</span>
+                            </div>
+                            <div class="detail-row">
+                                <span>Fee:</span>
+                                <span class="value">2%</span>
+                            </div>
+                            <div class="detail-row">
+                                <span>You Receive Today:</span>
+                                <span class="value">Rp 7,000,000</span>
+                            </div>
+                            <div class="detail-row">
+                                <span>Remaining on Payment:</span>
+                                <span class="value">Rp 2,800,000</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="selected-funding-summary" style="display: none;" class="selected-funding-summary">
+                    <h3>Your Selected Option: <span id="selected-option-name"></span></h3>
+                    <p>You'll receive <span id="selected-option-amount"></span> in your IDRX wallet immediately after signup.</p>
+                    <p>Fee: <span id="selected-option-fee"></span></p>
+                </div>
+                
+                <div class="text-center">
+                    <button class="btn btn-secondary" id="step-3-back">Back</button>
+                    <button class="btn btn-primary btn-large" id="step-3-continue" disabled>Continue</button>
+                </div>
+            </div>
+            
+            <!-- Step 4: Simulated Wallet Screen -->
+            <div class="step-content" id="step-4-content">
+                <h2>Your Triple Stack Wallet</h2>
+                <p>Here's a preview of how your funds will appear in your RupiahFlow wallet:</p>
+                
+                <div class="wallet-tabs">
+                    <div class="wallet-tab active" data-tab="idrx">IDRX Wallet</div>
+                    <div class="wallet-tab" data-tab="idrp">IDRP Ledger</div>
+                    <div class="wallet-tab" data-tab="fiat">Fiat IDR</div>
+                </div>
+                
+                <div class="tab-content active" id="idrx-content">
+                    <div class="wallet-info">
+                        <h3>IDRX Balance</h3>
+                        <div class="wallet-balance" id="idrx-balance">Rp 8,000,000</div>
+                        <p>Available for immediate use</p>
+                        
+                        <div class="wallet-actions">
+                            <button class="btn btn-primary">Transfer to Bank</button>
+                            <button class="btn btn-secondary">Pay Supplier</button>
+                        </div>
+                        
+                        <div class="ledger-entries">
+                            <h4>Recent Transactions</h4>
+                            
+                            <div class="ledger-entry">
+                                <div class="entry-details">
+                                    <span class="entry-title">Invoice Advance</span>
+                                    <span class="entry-date">Today</span>
+                                </div>
+                                <span class="entry-amount positive" id="idrx-invoice-amount">+Rp 8,000,000</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="idrp-content">
+                    <div class="wallet-info">
+                        <h3>IDRP Ledger Balance</h3>
+                        <div class="wallet-balance">Rp 10,000,000</div>
+                        <p>Total invoice value in your accounting ledger</p>
+                        
+                        <div class="ledger-entries">
+                            <h4>Ledger Entries</h4>
+                            
+                            <div class="ledger-entry">
+                                <div class="entry-details">
+                                    <span class="entry-title">Invoice #INV-2023-001</span>
+                                    <span class="entry-date">Today</span>
+                                </div>
+                                <span class="entry-amount positive">+Rp 10,000,000</span>
+                            </div>
+                            
+                            <div class="ledger-entry">
+                                <div class="entry-details">
+                                    <span class="entry-title">Advance Fee</span>
+                                    <span class="entry-date">Today</span>
+                                </div>
+                                <span class="entry-amount negative" id="idrp-fee-amount">-Rp 300,000</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="fiat-content">
+                    <div class="wallet-info">
+                        <h3>Fiat IDR Balance</h3>
+                        <div class="wallet-balance">Rp 0</div>
+                        <p>Connect your bank account to withdraw funds</p>
+                        
+                        <div class="bank-connect">
+                            <div class="bank-connect-icon">
+                                <i class="fas fa-university"></i>
+                            </div>
+                            <h4>Connect Your Bank Account</h4>
+                            <p>Securely link your business bank account to withdraw funds</p>
+                            <button class="btn btn-primary">Connect Bank</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <button class="btn btn-secondary" id="step-4-back">Back</button>
+                    <button class="btn btn-primary btn-large" id="step-4-continue">Continue</button>
+                </div>
+            </div>
+            
+            <!-- Step 5: User Prompt to Sign Up -->
+            <div class="step-content" id="step-5-content">
+                <h2>Create Your Account</h2>
+                <p>Complete your profile to activate your RupiahFlow account:</p>
+                
+                <div class="signup-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="full-name">Full Name</label>
+                            <input type="text" id="full-name" value="Martinus Aldryan" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="password">Create Password</label>
+                            <input type="password" id="password" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="business-name">Business Name</label>
+                        <input type="text" id="business-name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ktp-upload">Upload KTP/NPWP</label>
+                        <input type="file" id="ktp-upload" accept="image/*,.pdf">
+                        <small>For KYC verification (required by regulations)</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <input type="checkbox" id="terms" required>
+                        <label for="terms">I agree to the Terms of Service and Privacy Policy</label>
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <button class="btn btn-secondary" id="step-5-back">Back</button>
+                    <button class="btn btn-primary btn-large" id="step-5-continue">Join RupiahFlow</button>
+                </div>
+                
+                <div class="faq-section">
+                    <h3>Trust & Safety FAQ</h3>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>How is my data protected?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Your data is encrypted using bank-level security standards. We comply with all Indonesian data protection regulations and never share your information with unauthorized parties.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Is RupiahFlow regulated?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Yes, RupiahFlow operates in compliance with OJK regulations for financial services and Bank Indonesia guidelines for payment systems.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>What happens if my client doesn't pay?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>RupiahFlow assumes the payment risk. You keep the advance even if your client is late or defaults. We handle collections professionally while preserving your client relationship.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="partner-logos">
+                    <img src="images/partner1.svg" alt="Partner 1" class="partner-logo">
+                    <img src="images/partner2.svg" alt="Partner 2" class="partner-logo">
+                    <img src="images/partner3.svg" alt="Partner 3" class="partner-logo">
+                </div>
+            </div>
+            
+            <!-- Step 6: Confirmation Screen (After Signup) -->
+            <div class="step-content" id="step-6-content">
+                <div class="confirmation-screen">
+                    <div class="confirmation-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h2>Your Money Transfer is Scheduled!</h2>
+                    <p>Congratulations, Martinus Aldryan! Your account has been created and your funds are being processed.</p>
+                    
+                    <div class="transfer-details">
+                        <h3>Transfer Details</h3>
+                        
+                        <div class="transfer-detail-row">
+                            <span class="transfer-detail-label">Amount</span>
+                            <span class="transfer-detail-value" id="transfer-amount">Rp 8,000,000</span>
+                        </div>
+                        
+                        <div class="transfer-detail-row">
+                            <span class="transfer-detail-label">From</span>
+                            <span class="transfer-detail-value">RupiahFlow IDRX Wallet</span>
+                        </div>
+                        
+                        <div class="transfer-detail-row">
+                            <span class="transfer-detail-label">To</span>
+                            <span class="transfer-detail-value">Your Bank Account (Pending Connection)</span>
+                        </div>
+                        
+                        <div class="transfer-detail-row">
+                            <span class="transfer-detail-label">Processing Time</span>
+                            <span class="transfer-detail-value">1-2 Business Days</span>
+                        </div>
+                        
+                        <div class="transfer-detail-row">
+                            <span class="transfer-detail-label">Status</span>
+                            <span class="transfer-status">Processing</span>
+                        </div>
+                    </div>
+                    
+                    <h3>Next Steps</h3>
+                    <p>To complete your setup and receive your funds:</p>
+                    
+                    <div class="steps" style="max-width: 600px; margin: 2rem auto;">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-icon">
+                                <i class="fas fa-university"></i>
+                            </div>
+                            <h3>Connect Your Bank</h3>
+                            <p>Link your business bank account</p>
+                        </div>
+                        <div class="step-connector"></div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-icon">
+                                <i class="fas fa-id-card"></i>
+                            </div>
+                            <h3>Complete KYC</h3>
+                            <p>Verify your identity (takes ~1 hour)</p>
+                        </div>
+                        <div class="step-connector"></div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-icon">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                            <h3>Receive Funds</h3>
+                            <p>Money arrives in your bank account</p>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center" style="margin-top: 2rem;">
+                        <a href="index.html" class="btn btn-primary btn-large">Go to Dashboard</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <p>Smart finance for modern businesses – with IDR, made faster.</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Product</h4>
+                        <ul>
+                            <li><a href="#">Features</a></li>
+                            <li><a href="#">Pricing</a></li>
+                            <li><a href="#">Integrations</a></li>
+                            <li><a href="#">Enterprise</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Resources</h4>
+                        <ul>
+                            <li><a href="#">Documentation</a></li>
+                            <li><a href="#">API</a></li>
+                            <li><a href="#">Blog</a></li>
+                            <li><a href="#">Guides</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Company</h4>
+                        <ul>
+                            <li><a href="#">About</a></li>
+                            <li><a href="#">Careers</a></li>
+                            <li><a href="#">Contact</a></li>
+                            <li><a href="#">Partners</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Legal</h4>
+                        <ul>
+                            <li><a href="#">Privacy</a></li>
+                            <li><a href="#">Terms</a></li>
+                            <li><a href="#">Security</a></li>
+                            <li><a href="#">Compliance</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 RupiahFlow. All rights reserved.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Step navigation
+            const steps = document.querySelectorAll('.progress-step');
+            const stepContents = document.querySelectorAll('.step-content');
+            let currentStep = 1;
+            
+            function goToStep(step) {
+                // Hide all step contents
+                stepContents.forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                // Show the current step content
+                document.getElementById(`step-${step}-content`).classList.add('active');
+                
+                // Update progress bar
+                steps.forEach((stepEl, index) => {
+                    if (index + 1 < step) {
+                        stepEl.classList.remove('active');
+                        stepEl.classList.add('completed');
+                    } else if (index + 1 === step) {
+                        stepEl.classList.add('active');
+                        stepEl.classList.remove('completed');
+                    } else {
+                        stepEl.classList.remove('active', 'completed');
+                    }
+                });
+                
+                currentStep = step;
+                
+                // Scroll to top of the step
+                window.scrollTo({
+                    top: document.querySelector('.progress-bar').offsetTop - 100,
+                    behavior: 'smooth'
+                });
+            }
+            
+            // Role card selection
+            const roleCards = document.querySelectorAll('.role-card');
+            roleCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    roleCards.forEach(c => c.classList.remove('selected'));
+                    this.classList.add('selected');
+                    document.getElementById('step-1-continue').removeAttribute('disabled');
+                });
+            });
+            
+            // Upload option selection
+            const uploadOptions = document.querySelectorAll('.upload-option');
+            const manualInvoiceForm = document.getElementById('manual-invoice-form');
+            
+            uploadOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    uploadOptions.forEach(o => o.classList.remove('selected'));
+                    this.classList.add('selected');
+                    
+                    if (this.id === 'manual-entry') {
+                        manualInvoiceForm.style.display = 'block';
+                    } else {
+                        manualInvoiceForm.style.display = 'none';
+                    }
+                });
+            });
+            
+            // Funding option selection
+            const fundingOptions = document.querySelectorAll('.funding-option');
+            const selectedFundingSummary = document.getElementById('selected-funding-summary');
+            const selectedOptionName = document.getElementById('selected-option-name');
+            const selectedOptionAmount = document.getElementById('selected-option-amount');
+            const selectedOptionFee = document.getElementById('selected-option-fee');
+            
+            fundingOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    fundingOptions.forEach(o => o.classList.remove('selected'));
+                    this.classList.add('selected');
+                    document.getElementById('step-3-continue').removeAttribute('disabled');
+                    
+                    // Update selected option summary
+                    const optionType = this.getAttribute('data-option');
+                    let optionName, amount, fee;
+                    
+                    if (optionType === 'standard') {
+                        optionName = 'Standard Advance';
+                        amount = 'Rp 8,000,000';
+                        fee = '3% (Rp 300,000)';
+                    } else if (optionType === 'maximum') {
+                        optionName = 'Maximum Advance';
+                        amount = 'Rp 9,000,000';
+                        fee = '4.5% (Rp 450,000)';
+                    } else if (optionType === 'flexible') {
+                        optionName = 'Flexible Split';
+                        amount = 'Rp 7,000,000';
+                        fee = '2% (Rp 200,000)';
+                    }
+                    
+                    selectedOptionName.textContent = optionName;
+                    selectedOptionAmount.textContent = amount;
+                    selectedOptionFee.textContent = fee;
+                    selectedFundingSummary.style.display = 'block';
+                    
+                    // Update wallet amounts based on selection
+                    updateWalletBasedOnFunding(optionType);
+                });
+            });
+            
+            // Update wallet amounts based on funding option
+            function updateWalletBasedOnFunding(optionType) {
+                const idrxBalance = document.getElementById('idrx-balance');
+                const idrxInvoiceAmount = document.getElementById('idrx-invoice-amount');
+                const idrpFeeAmount = document.getElementById('idrp-fee-amount');
+                const transferAmount = document.getElementById('transfer-amount');
+                
+                if (optionType === 'standard') {
+                    idrxBalance.textContent = 'Rp 8,000,000';
+                    idrxInvoiceAmount.textContent = '+Rp 8,000,000';
+                    idrpFeeAmount.textContent = '-Rp 300,000';
+                    transferAmount.textContent = 'Rp 8,000,000';
+                } else if (optionType === 'maximum') {
+                    idrxBalance.textContent = 'Rp 9,000,000';
+                    idrxInvoiceAmount.textContent = '+Rp 9,000,000';
+                    idrpFeeAmount.textContent = '-Rp 450,000';
+                    transferAmount.textContent = 'Rp 9,000,000';
+                } else if (optionType === 'flexible') {
+                    idrxBalance.textContent = 'Rp 7,000,000';
+                    idrxInvoiceAmount.textContent = '+Rp 7,000,000';
+                    idrpFeeAmount.textContent = '-Rp 200,000';
+                    transferAmount.textContent = 'Rp 7,000,000';
+                }
+            }
+            
+            // Wallet tabs
+            const walletTabs = document.querySelectorAll('.wallet-tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            walletTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    walletTabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    this.classList.add('active');
+                    document.getElementById(`${tabId}-content`).classList.add('active');
+                });
+            });
+            
+            // FAQ toggles
+            const faqQuestions = document.querySelectorAll('.faq-question');
+            
+            faqQuestions.forEach(question => {
+                question.addEventListener('click', function() {
+                    const answer = this.nextElementSibling;
+                    answer.classList.toggle('active');
+                    
+                    const icon = this.querySelector('i');
+                    if (answer.classList.contains('active')) {
+                        icon.classList.remove('fa-chevron-down');
+                        icon.classList.add('fa-chevron-up');
+                    } else {
+                        icon.classList.remove('fa-chevron-up');
+                        icon.classList.add('fa-chevron-down');
+                    }
+                });
+            });
+            
+            // Step navigation buttons
+            document.getElementById('step-1-continue').addEventListener('click', () => goToStep(2));
+            document.getElementById('step-2-back').addEventListener('click', () => goToStep(1));
+            document.getElementById('step-2-continue').addEventListener('click', () => goToStep(3));
+            document.getElementById('step-3-back').addEventListener('click', () => goToStep(2));
+            document.getElementById('step-3-continue').addEventListener('click', () => goToStep(4));
+            document.getElementById('step-4-back').addEventListener('click', () => goToStep(3));
+            document.getElementById('step-4-continue').addEventListener('click', () => goToStep(5));
+            document.getElementById('step-5-back').addEventListener('click', () => goToStep(4));
+            
+            // Form submission
+            document.getElementById('step-5-continue').addEventListener('click', function(e) {
+                e.preventDefault();
+                // In a real app, you would validate the form and submit it to your backend
+                // For this demo, we'll just show the confirmation screen
+                goToStep(6);
+            });
+            
+            // Set default funding option
+            document.querySelector('.funding-option[data-option="standard"]').click();
+            
+            // Set default upload option
+            document.getElementById('manual-entry').click();
+        });
+    </script>
+</body>
+</html>
