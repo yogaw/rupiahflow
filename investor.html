@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RupiahFlow - Invest in Indonesia's Business Engine</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        /* Additional styles specific to investor page */
+        .value-prop-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .value-prop-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+        }
+        
+        .value-prop-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--box-shadow);
+            border-color: var(--primary-light);
+        }
+        
+        .value-prop-icon {
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .investor-flow {
+            padding: 6rem 0;
+            background-color: white;
+        }
+        
+        .investor-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .stat-card {
+            background-color: var(--primary-light);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .dashboard-preview {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+        
+        .dashboard-card {
+            background-color: var(--light-color);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+        }
+        
+        .dashboard-card h4 {
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+        }
+        
+        .sector-exposure {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+        
+        .sector-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .sector-name {
+            font-weight: 500;
+        }
+        
+        .sector-value {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .risk-management {
+            margin-top: 2rem;
+        }
+        
+        .risk-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .risk-icon {
+            color: var(--success-color);
+            margin-right: 0.75rem;
+        }
+        
+        .download-cta {
+            display: inline-flex;
+            align-items: center;
+            margin-top: 1rem;
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+        
+        .download-cta i {
+            margin-right: 0.5rem;
+        }
+        
+        .leaderboard {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .leaderboard-rank {
+            font-weight: 700;
+            color: var(--primary-color);
+            width: 40px;
+        }
+        
+        .leaderboard-name {
+            flex-grow: 1;
+        }
+        
+        .leaderboard-value {
+            font-weight: 600;
+        }
+        
+        .invoice-preview {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 2rem;
+            margin: 3rem 0;
+            border: 1px solid var(--border-color);
+        }
+        
+        .invoice-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+        
+        .invoice-status {
+            background-color: var(--primary-light);
+            color: var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+        
+        .invoice-details {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .invoice-detail-item h5 {
+            color: var(--gray-color);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .invoice-detail-value {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .invoice-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 992px) {
+            .investor-stats,
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sector-exposure {
+                grid-template-columns: 1fr;
+            }
+            
+            .invoice-details {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <span>RupiahFlow</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html#why-rupiahflow">Why RupiahFlow</a></li>
+                    <li><a href="index.html#who-its-for">Who It's For</a></li>
+                    <li><a href="index.html#how-it-works">How It Works</a></li>
+                    <li><a href="index.html#benefits">Benefits</a></li>
+                    <li><a href="index.html#security">Security</a></li>
+                </ul>
+                <div class="cta-button">
+                    <a href="start.html" class="btn btn-primary">Start Free</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Fuel Indonesia's business engine. Earn yield while doing good.</h1>
+                    <p>Back real invoices from real businesses using IDRX — and earn attractive, short-cycle returns while supporting economic growth.</p>
+                    <div class="hero-cta">
+                        <a href="#signup" class="btn btn-primary">Become a Liquidity Partner</a>
+                        <a href="#how-it-works" class="btn btn-secondary">Explore the Investment Model</a>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="images/investor-hero.svg" alt="RupiahFlow Investment Dashboard" onerror="this.src='https://via.placeholder.com/500x300?text=Investment+Dashboard'">
+                </div>
+            </div>
+        </section>
+
+        <!-- Why Invest with RupiahFlow Section -->
+        <section id="why-invest" class="why-rupiahflow">
+            <div class="container">
+                <h2 class="section-title">Why Invest with RupiahFlow?</h2>
+                <div class="value-prop-grid">
+                    <div class="value-prop-card">
+                        <div class="value-prop-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>Short-Term Yield</h3>
+                        <p>Earn up to X% APY by funding verified business invoices</p>
+                    </div>
+                    <div class="value-prop-card">
+                        <div class="value-prop-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h3>Transparent On-Chain Ledger</h3>
+                        <p>All funds move through traceable, auditable IDRX contracts</p>
+                    </div>
+                    <div class="value-prop-card">
+                        <div class="value-prop-icon">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        <h3>Real Economic Impact</h3>
+                        <p>Your capital helps real freelancers and SMEs access funding instantly</p>
+                    </div>
+                    <div class="value-prop-card">
+                        <div class="value-prop-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3>Regulated & Secured</h3>
+                        <p>KYC, audited smart contracts, insured wallets (via [partner])</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works Section -->
+        <section id="how-it-works" class="investor-flow">
+            <div class="container">
+                <h2 class="section-title">How It Works: 4-Step Investor Flow</h2>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-icon">
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                        <h3>Deposit IDRX into liquidity pool</h3>
+                        <p>Non-custodial, verifiable smart contract</p>
+                    </div>
+                    <div class="step-connector"></div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-icon">
+                            <i class="fas fa-random"></i>
+                        </div>
+                        <h3>RupiahFlow matches you to invoices</h3>
+                        <p>Risk is distributed or individually selected (coming soon)</p>
+                    </div>
+                    <div class="step-connector"></div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <h3>Businesses repay on invoice maturity</h3>
+                        <p>Typically 30–60 days</p>
+                    </div>
+                    <div class="step-connector"></div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-icon">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <h3>You receive principal + yield in IDRX</h3>
+                        <p>Withdraw or reinvest</p>
+                    </div>
+                </div>
+                <p class="tagline">DeFi mechanics. TradFi outcomes. Impact finance redefined.</p>
+            </div>
+        </section>
+
+        <!-- What You Can See as an Investor Section -->
+        <section id="investor-dashboard" class="benefits">
+            <div class="container">
+                <h2 class="section-title">What You Can See as an Investor</h2>
+                
+                <!-- Live Pool Stats -->
+                <div class="investor-stats">
+                    <div class="stat-card">
+                        <h4>Total Funded</h4>
+                        <p class="stat-value">IDR 8.5B</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Invoice Count</h4>
+                        <p class="stat-value">347</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Average Return</h4>
+                        <p class="stat-value">12.4%</p>
+                    </div>
+                </div>
+                
+                <!-- Portfolio Dashboard -->
+                <div class="dashboard-preview">
+                    <h3>Portfolio Dashboard</h3>
+                    <div class="dashboard-grid">
+                        <div class="dashboard-card">
+                            <h4>Investment Performance</h4>
+                            <div class="dashboard-metrics">
+                                <div class="metric-item">
+                                    <p><strong>Expected return:</strong> 14.2% APY</p>
+                                </div>
+                                <div class="metric-item">
+                                    <p><strong>Funding in progress:</strong> IDR 250,000,000</p>
+                                </div>
+                                <div class="metric-item">
+                                    <p><strong>Settled returns:</strong> IDR 42,500,000</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dashboard-card">
+                            <h4>Sector Exposure</h4>
+                            <div class="sector-exposure">
+                                <div class="sector-item">
+                                    <span class="sector-name">Retail</span>
+                                    <span class="sector-value">35%</span>
+                                </div>
+                                <div class="sector-item">
+                                    <span class="sector-name">Agencies</span>
+                                    <span class="sector-value">25%</span>
+                                </div>
+                                <div class="sector-item">
+                                    <span class="sector-name">Logistics</span>
+                                    <span class="sector-value">20%</span>
+                                </div>
+                                <div class="sector-item">
+                                    <span class="sector-name">Tech</span>
+                                    <span class="sector-value">15%</span>
+                                </div>
+                                <div class="sector-item">
+                                    <span class="sector-name">Others</span>
+                                    <span class="sector-value">5%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Risk Management Overview -->
+                    <div class="risk-management">
+                        <h4>Risk Management Overview</h4>
+                        <div class="risk-items">
+                            <div class="risk-item">
+                                <span class="risk-icon"><i class="fas fa-check-circle"></i></span>
+                                <span>Invoice scoring based on business history and payment records</span>
+                            </div>
+                            <div class="risk-item">
+                                <span class="risk-icon"><i class="fas fa-check-circle"></i></span>
+                                <span>Delinquency protection pool covering up to 5% of defaults</span>
+                            </div>
+                            <div class="risk-item">
+                                <span class="risk-icon"><i class="fas fa-check-circle"></i></span>
+                                <span>Exposure limits per wallet to ensure diversification</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <a href="#" class="download-cta">
+                        <i class="fas fa-file-download"></i> Download Investor One-Pager
+                    </a>
+                </div>
+                
+                <!-- Optional: Pool Leaderboard -->
+                <div class="leaderboard">
+                    <h3>Pool Leaderboard</h3>
+                    <div class="leaderboard-items">
+                        <div class="leaderboard-item">
+                            <span class="leaderboard-rank">#1</span>
+                            <span class="leaderboard-name">Top LP (0x7a...3f)</span>
+                            <span class="leaderboard-value">IDR 1.2B</span>
+                        </div>
+                        <div class="leaderboard-item">
+                            <span class="leaderboard-rank">#2</span>
+                            <span class="leaderboard-name">Second LP (0x4b...8d)</span>
+                            <span class="leaderboard-value">IDR 850M</span>
+                        </div>
+                        <div class="leaderboard-item">
+                            <span class="leaderboard-rank">#3</span>
+                            <span class="leaderboard-name">Third LP (0x2c...9a)</span>
+                            <span class="leaderboard-value">IDR 620M</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Invoice Preview -->
+                <div class="invoice-preview">
+                    <h3>Fund this invoice</h3>
+                    <div class="invoice-header">
+                        <h4>Invoice #INV-2023-089</h4>
+                        <span class="invoice-status">Seeking Funding</span>
+                    </div>
+                    <div class="invoice-details">
+                        <div class="invoice-detail-item">
+                            <h5>Amount</h5>
+                            <p class="invoice-detail-value">IDR 45,000,000</p>
+                        </div>
+                        <div class="invoice-detail-item">
+                            <h5>Term</h5>
+                            <p class="invoice-detail-value">45 days</p>
+                        </div>
+                        <div class="invoice-detail-item">
+                            <h5>Expected Return</h5>
+                            <p class="invoice-detail-value">13.8% APY</p>
+                        </div>
+                        <div class="invoice-detail-item">
+                            <h5>Business Type</h5>
+                            <p class="invoice-detail-value">E-commerce Retailer</p>
+                        </div>
+                        <div class="invoice-detail-item">
+                            <h5>Risk Score</h5>
+                            <p class="invoice-detail-value">A (Low Risk)</p>
+                        </div>
+                        <div class="invoice-detail-item">
+                            <h5>Funded</h5>
+                            <p class="invoice-detail-value">65% Complete</p>
+                        </div>
+                    </div>
+                    <div class="invoice-actions">
+                        <a href="#" class="btn btn-secondary">View Details</a>
+                        <a href="#" class="btn btn-primary">Fund This Invoice</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Security & Compliance Section -->
+        <section id="security" class="security">
+            <div class="container">
+                <h2 class="section-title">Security & Compliance</h2>
+                <div class="security-features">
+                    <div class="security-feature">
+                        <div class="security-icon">
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                        <p>Funds held in secure smart wallets</p>
+                    </div>
+                    <div class="security-feature">
+                        <div class="security-icon">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        <p>KYC for borrowers, KYB for business entities</p>
+                    </div>
+                    <div class="security-feature">
+                        <div class="security-icon">
+                            <i class="fas fa-file-contract"></i>
+                        </div>
+                        <p>Contract audits by trusted security firms</p>
+                    </div>
+                    <div class="security-feature">
+                        <div class="security-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <p>Optional insurance integration</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonial Section -->
+        <section class="who-its-for">
+            <div class="container">
+                <div class="testimonial-box">
+                    <blockquote>
+                        "RupiahFlow combines on-chain transparency with real-world returns. I never thought helping small businesses could be this smooth."
+                    </blockquote>
+                    <cite>– Bibil, Early-stage Web3 fund manager</cite>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final CTA Section -->
+        <section id="signup" class="final-cta">
+            <div class="container">
+                <h2>Ready to unlock yield from Indonesia's growing business ecosystem?</h2>
+                <div class="cta-buttons">
+                    <a href="#" class="btn btn-primary btn-large">Request Investor Access</a>
+                    <a href="#" class="btn btn-secondary btn-large">Talk to the Team</a>
+                </div>
+                <p class="small-text">Want to explore this as a regulated financial product? Let's co-develop it.</p>
+                <div class="trust-badges">
+                    <div class="badge">
+                        <img src="images/idrx-badge.svg" alt="Powered by IDRX" onerror="this.src='https://via.placeholder.com/30x30?text=IDRX'">
+                        <span>Powered by IDRX</span>
+                    </div>
+                    <div class="badge">
+                        <img src="images/partner-badge.svg" alt="Trusted Partner" onerror="this.src='https://via.placeholder.com/30x30?text=Partner'">
+                        <span>Backed by [Stablecoin provider], KYC with [Partner]</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <p>Smart finance for modern businesses – with IDR, made faster.</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Product</h4>
+                        <ul>
+                            <li><a href="#">Features</a></li>
+                            <li><a href="#">Pricing</a></li>
+                            <li><a href="#">Integrations</a></li>
+                            <li><a href="#">Enterprise</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Resources</h4>
+                        <ul>
+                            <li><a href="#">Documentation</a></li>
+                            <li><a href="#">API</a></li>
+                            <li><a href="#">Blog</a></li>
+                            <li><a href="#">Guides</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Company</h4>
+                        <ul>
+                            <li><a href="#">About</a></li>
+                            <li><a href="#">Careers</a></li>
+                            <li><a href="#">Contact</a></li>
+                            <li><a href="#">Partners</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Legal</h4>
+                        <ul>
+                            <li><a href="#">Privacy</a></li>
+                            <li><a href="#">Terms</a></li>
+                            <li><a href="#">Security</a></li>
+                            <li><a href="#">Compliance</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 RupiahFlow. All rights reserved.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Additional JavaScript for investor page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add animation for statistics
+            const statValues = document.querySelectorAll('.stat-value');
+            
+            statValues.forEach(stat => {
+                const finalValue = stat.textContent;
+                stat.textContent = '0';
+                
+                setTimeout(() => {
+                    animateValue(stat, 0, parseFloat(finalValue.replace(/[^0-9.]/g, '')), 1500, finalValue);
+                }, 500);
+            });
+            
+            function animateValue(element, start, end, duration, finalText) {
+                let startTimestamp = null;
+                const step = (timestamp) => {
+                    if (!startTimestamp) startTimestamp = timestamp;
+                    const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                    const value = Math.floor(progress * (end - start) + start);
+                    
+                    if (finalText.includes('%')) {
+                        element.textContent = value + '%';
+                    } else if (finalText.includes('IDR')) {
+                        element.textContent = 'IDR ' + value.toLocaleString();
+                    } else {
+                        element.textContent = value;
+                    }
+                    
+                    if (progress < 1) {
+                        window.requestAnimationFrame(step);
+                    } else {
+                        element.textContent = finalText;
+                    }
+                };
+                window.requestAnimationFrame(step);
+            }
+        });
+    </script>
+</body>
+</html>
