@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RupiahFlow - Investor Journey</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        /* Additional styles for investor journey page */
+        .journey-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        
+        .progress-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        
+        .progress-bar::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: var(--border-color);
+            z-index: 1;
+        }
+        
+        .progress-step {
+            position: relative;
+            z-index: 2;
+            background-color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            border: 2px solid var(--border-color);
+        }
+        
+        .progress-step.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .progress-step.completed {
+            background-color: var(--success-color);
+            color: white;
+            border-color: var(--success-color);
+        }
+        
+        .step-content {
+            display: none;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        .step-content.active {
+            display: block;
+        }
+        
+        .investor-type-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .investor-type-card {
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .investor-type-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--box-shadow);
+        }
+        
+        .investor-type-card.selected {
+            border-color: var(--primary-color);
+            background-color: var(--primary-light);
+        }
+        
+        .investor-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+        
+        .invoice-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background-color: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .invoice-table th,
+        .invoice-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .invoice-table th {
+            background-color: var(--light-color);
+            font-weight: 600;
+        }
+        
+        .invoice-table tr:hover {
+            background-color: var(--primary-light);
+            cursor: pointer;
+        }
+        
+        .invoice-table tr.selected {
+            background-color: var(--primary-light);
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .risk-score {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+            text-align: center;
+            min-width: 30px;
+        }
+        
+        .risk-score.a-plus {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .risk-score.a {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .risk-score.a-minus {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .risk-score.b-plus {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .risk-score.b {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .funding-modal {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--box-shadow);
+            margin: 2rem 0;
+            border: 1px solid var(--border-color);
+        }
+        
+        .funding-details {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background-color: var(--light-color);
+            border-radius: var(--border-radius);
+        }
+        
+        .funding-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .funding-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .funding-label {
+            font-weight: 500;
+        }
+        
+        .funding-value {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .funding-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            margin-top: 1.5rem;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+            margin-right: 1rem;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .toggle-slider {
+            background-color: var(--primary-color);
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+        
+        .portfolio-dashboard {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--box-shadow);
+            margin: 2rem 0;
+        }
+        
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .portfolio-card {
+            background-color: var(--light-color);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+        }
+        
+        .portfolio-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 1rem 0;
+        }
+        
+        .portfolio-label {
+            color: var(--gray-color);
+            font-size: 0.9rem;
+        }
+        
+        .countdown {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .countdown-item {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: var(--border-radius);
+            padding: 0.5rem;
+            min-width: 50px;
+            text-align: center;
+        }
+        
+        .countdown-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .countdown-label {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+        
+        .risk-chart {
+            height: 200px;
+            margin-top: 1rem;
+            position: relative;
+        }
+        
+        .chart-placeholder {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: conic-gradient(
+                var(--success-color) 0% 60%,
+                var(--warning-color) 60% 85%,
+                var(--danger-color) 85% 100%
+            );
+            margin: 0 auto;
+        }
+        
+        .chart-legend {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+        
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+            margin-right: 0.5rem;
+        }
+        
+        .legend-color.a {
+            background-color: var(--success-color);
+        }
+        
+        .legend-color.b {
+            background-color: var(--warning-color);
+        }
+        
+        .legend-color.c {
+            background-color: var(--danger-color);
+        }
+        
+        .payout-message {
+            background-color: var(--success-color);
+            color: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            text-align: center;
+            margin: 2rem 0;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        .payout-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .payout-amount {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 1rem 0;
+        }
+        
+        .payout-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .conversion-cta {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: var(--box-shadow);
+            margin: 3rem 0;
+            border-top: 4px solid var(--primary-color);
+        }
+        
+        .conversion-cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .download-pack {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 2rem;
+            color: var(--primary-color);
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        .download-pack i {
+            margin-right: 0.5rem;
+        }
+        
+        .optional-features {
+            background-color: var(--light-color);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .feature-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--box-shadow);
+        }
+        
+        .feature-icon {
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @media (max-width: 768px) {
+            .investor-type-cards,
+            .portfolio-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .invoice-table {
+                font-size: 0.9rem;
+            }
+            
+            .funding-actions,
+            .cta-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <span>RupiahFlow</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html#why-rupiahflow">Why RupiahFlow</a></li>
+                    <li><a href="index.html#who-its-for">Who It's For</a></li>
+                    <li><a href="index.html#how-it-works">How It Works</a></li>
+                    <li><a href="index.html#benefits">Benefits</a></li>
+                    <li><a href="index.html#security">Security</a></li>
+                </ul>
+                <div class="cta-button">
+                    <a href="index.html" class="btn btn-secondary">Back to Home</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Experience the Future of Invoice Investing</h1>
+                    <p>Deploy capital into Indonesia's growing business ecosystem with transparent returns and real-time tracking.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="journey-container">
+            <div class="progress-bar">
+                <div class="progress-step active" id="step-1">1</div>
+                <div class="progress-step" id="step-2">2</div>
+                <div class="progress-step" id="step-3">3</div>
+                <div class="progress-step" id="step-4">4</div>
+                <div class="progress-step" id="step-5">5</div>
+                <div class="progress-step" id="step-6">6</div>
+            </div>
+            
+            <!-- Step 1: Investor Persona Onboarding -->
+            <div class="step-content active" id="step-1-content">
+                <h2>Investor Persona Onboarding</h2>
+                <p>Are you looking to deploy personal capital or represent a fund?</p>
+                
+                <div class="investor-type-cards">
+                    <div class="investor-type-card" data-type="personal">
+                        <div class="investor-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h3>Personal Investor</h3>
+                        <p>Individual looking to diversify portfolio with invoice financing</p>
+                    </div>
+                    
+                    <div class="investor-type-card" data-type="institutional">
+                        <div class="investor-icon">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <h3>Institutional / LP Fund</h3>
+                        <p>Representing a fund or financial institution</p>
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <p class="small-text"><i class="fas fa-info-circle"></i> This helps customize risk exposure and future onboarding funnel</p>
+                    <button class="btn btn-primary btn-large" id="step-1-continue" disabled>Continue</button>
+                </div>
+            </div>
+            
+            <!-- Step 2: See Sample Invoice Pool -->
+            <div class="step-content" id="step-2-content">
+                <h2>Explore Live Invoice Opportunities</h2>
+                <p>Browse through our curated selection of high-quality invoice opportunities from verified Indonesian businesses.</p>
+                
+                <table class="invoice-table">
+                    <thead>
+                        <tr>
+                            <th>Client Name</th>
+                            <th>Sector</th>
+                            <th>Invoice Value</th>
+                            <th>Funding Need</th>
+                            <th>Maturity</th>
+                            <th>Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-invoice="agung">
+                            <td>Agung Logistics</td>
+                            <td>Supply Chain</td>
+                            <td>Rp 20,000,000</td>
+                            <td>Rp 18,000,000</td>
+                            <td>30 days</td>
+                            <td><span class="risk-score a-minus">A–</span></td>
+                        </tr>
+                        <tr data-invoice="studio">
+                            <td>Studio Garis</td>
+                            <td>Creative Agency</td>
+                            <td>Rp 5,000,000</td>
+                            <td>Rp 4,000,000</td>
+                            <td>14 days</td>
+                            <td><span class="risk-score b">B</span></td>
+                        </tr>
+                        <tr data-invoice="reseller">
+                            <td>Reseller Nusantara</td>
+                            <td>Retail</td>
+                            <td>Rp 12,000,000</td>
+                            <td>Rp 9,000,000</td>
+                            <td>60 days</td>
+                            <td><span class="risk-score a">A</span></td>
+                        </tr>
+                        <tr data-invoice="tech">
+                            <td>TechSolusi Indonesia</td>
+                            <td>Technology</td>
+                            <td>Rp 35,000,000</td>
+                            <td>Rp 30,000,000</td>
+                            <td>45 days</td>
+                            <td><span class="risk-score a-plus">A+</span></td>
+                        </tr>
+                        <tr data-invoice="food">
+                            <td>Makanan Sehat Co.</td>
+                            <td>Food & Beverage</td>
+                            <td>Rp 8,500,000</td>
+                            <td>Rp 7,000,000</td>
+                            <td>21 days</td>
+                            <td><span class="risk-score b-plus">B+</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="text-center">
+                    <button class="btn btn-primary btn-large" id="fund-invoice" disabled>Fund This Invoice</button>
+                </div>
+            </div>
+            
+            <!-- Step 3: Simulated Funding Modal -->
+            <div class="step-content" id="step-3-content">
+                <h2>Simulated Funding</h2>
+                <p>Review the details of your investment before confirming.</p>
+                
+                <div class="funding-modal">
+                    <h3>Investment Preview</h3>
+                    <p>You are about to fund <strong>Rp 4,000,000</strong> in IDRX for Studio Garis invoice.</p>
+                    
+                    <div class="funding-details">
+                        <div class="funding-row">
+                            <span class="funding-label">Investment Amount:</span>
+                            <span class="funding-value">Rp 4,000,000 IDRX</span>
+                        </div>
+                        <div class="funding-row">
+                            <span class="funding-label">Expected Return:</span>
+                            <span class="funding-value">Rp 4,080,000 IDRX</span>
+                        </div>
+                        <div class="funding-row">
+                            <span class="funding-label">Maturity Period:</span>
+                            <span class="funding-value">14 days</span>
+                        </div>
+                        <div class="funding-row">
+                            <span class="funding-label">Annualized Return:</span>
+                            <span class="funding-value">6% APY</span>
+                        </div>
+                        <div class="funding-row">
+                            <span class="funding-label">Risk Assessment:</span>
+                            <span class="funding-value">Grade B (Moderate Risk)</span>
+                        </div>
+                    </div>
+                    
+                    <div class="toggle-container">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="auto-stake">
+                            <span class="toggle-slider"></span>
+                        </label>
+                        <span>Auto-stake returns for compound growth</span>
+                    </div>
+                    
+                    <div class="funding-actions">
+                        <button class="btn btn-primary btn-large" id="accept-funding">Accept & Execute Smart Contract</button>
+                        <button class="btn btn-secondary btn-large" id="decline-funding">Decline</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Step 4: Track Funding Outcome -->
+            <div class="step-content" id="step-4-content">
+                <h2>Your Investment Portfolio</h2>
+                <p>Track your investment performance in real-time.</p>
+                
+                <div class="portfolio-dashboard">
+                    <h3>Investment Dashboard</h3>
+                    
+                    <div class="portfolio-grid">
+                        <div class="portfolio-card">
+                            <span class="portfolio-label">Total Funded Amount</span>
+                            <div class="portfolio-value">Rp 4,000,000</div>
+                            <p>Deployed in 1 active invoice</p>
+                        </div>
+                        
+                        <div class="portfolio-card">
+                            <span class="portfolio-label">Return in Progress</span>
+                            <div class="portfolio-value">Rp 80,000</div>
+                            <p>Expected profit at maturity</p>
+                        </div>
+                        
+                        <div class="portfolio-card">
+                            <span class="portfolio-label">Maturity Countdown</span>
+                            <div class="countdown">
+                                <div class="countdown-item">
+                                    <div class="countdown-value">14</div>
+                                    <div class="countdown-label">Days</div>
+                                </div>
+                                <div class="countdown-item">
+                                    <div class="countdown-value">00</div>
+                                    <div class="countdown-label">Hours</div>
+                                </div>
+                                <div class="countdown-item">
+                                    <div class="countdown-value">00</div>
+                                    <div class="countdown-label">Mins</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="portfolio-card">
+                            <span class="portfolio-label">Risk Class Exposure</span>
+                            <div class="risk-chart">
+                                <div class="chart-placeholder"></div>
+                                <div class="chart-legend">
+                                    <div class="legend-item">
+                                        <span class="legend-color a"></span>
+                                        <span>A Grade: 0%</span>
+                                    </div>
+                                    <div class="legend-item">
+                                        <span class="legend-color b"></span>
+                                        <span>B Grade: 100%</span>
+                                    </div>
+                                    <div class="legend-item">
+                                        <span class="legend-color c"></span>
+                                        <span>C Grade: 0%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center" style="margin-top: 2rem;">
+                        <button class="btn btn-primary" id="simulate-payout">Simulate Fast-Forward (Demo)</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Step 5: Simulated Payout -->
+            <div class="step-content" id="step-5-content">
+                <div class="payout-message">
+                    <div class="payout-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h2>Invoice Successfully Settled!</h2>
+                    <p>The invoice from Studio Garis has been paid in full by the client.</p>
+                    
+                    <div class="payout-amount">You earned Rp 80,000 in IDRX</div>
+                    <p>Your investment has generated a 2% return in just 14 days (6% annualized)</p>
+                    
+                    <div class="payout-actions">
+                        <button class="btn btn-primary btn-large" id="reinvest">Reinvest Rp 4,080,000</button>
+                        <button class="btn btn-secondary btn-large" id="withdraw">Withdraw to IDR</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Step 6: Investor CTA Conversion -->
+            <div class="step-content" id="step-6-content">
+                <div class="conversion-cta">
+                    <h2>Ready to deploy real capital into real invoices?</h2>
+                    <p>Join early investors who are already earning returns from Indonesia's growing business ecosystem.</p>
+                    
+                    <div class="cta-buttons">
+                        <a href="#" class="btn btn-primary btn-large">Request Early Access</a>
+                        <a href="#" class="btn btn-secondary btn-large">Talk to the Team</a>
+                    </div>
+                    
+                    <a href="#" class="download-pack">
+                        <i class="fas fa-file-download"></i> Download Investor Pack (1-pager)
+                    </a>
+                </div>
+                
+                <div class="optional-features">
+                    <h3>Explore Advanced Features</h3>
+                    <p>These premium features will be available to early investors:</p>
+                    
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-layer-group"></i>
+                            </div>
+                            <h4>Build Your Own Pool</h4>
+                            <p>Create a diversified invoice basket with custom risk parameters and sector exposure</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-sliders-h"></i>
+                            </div>
+                            <h4>Dynamic Risk Slider</h4>
+                            <p>Adjust your risk tolerance to see real-time return projections across different invoice grades</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-chart-pie"></i>
+                            </div>
+                            <h4>Tax Implications Preview</h4>
+                            <p>Visualize post-fee net returns with integrated tax optimization suggestions</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-exchange-alt"></i>
+                            </div>
+                            <h4>IDRX → IDR Cashout Logic</h4>
+                            <p>Seamless conversion between digital and fiat currency with real-time rate tracking</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <p>Smart finance for modern businesses – with IDR, made faster.</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Product</h4>
+                        <ul>
+                            <li><a href="#">Features</a></li>
+                            <li><a href="#">Pricing</a></li>
+                            <li><a href="#">Integrations</a></li>
+                            <li><a href="#">Enterprise</a></li>
+                            <li><a href="investor.html">For Investors</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Resources</h4>
+                        <ul>
+                            <li><a href="#">Documentation</a></li>
+                            <li><a href="#">API</a></li>
+                            <li><a href="#">Blog</a></li>
+                            <li><a href="#">Guides</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Company</h4>
+                        <ul>
+                            <li><a href="#">About</a></li>
+                            <li><a href="#">Careers</a></li>
+                            <li><a href="#">Contact</a></li>
+                            <li><a href="#">Partners</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Legal</h4>
+                        <ul>
+                            <li><a href="#">Privacy</a></li>
+                            <li><a href="#">Terms</a></li>
+                            <li><a href="#">Security</a></li>
+                            <li><a href="#">Compliance</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 RupiahFlow. All rights reserved.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Step 1: Investor Type Selection
+            const investorTypeCards = document.querySelectorAll('.investor-type-card');
+            const step1Continue = document.getElementById('step-1-continue');
+            
+            investorTypeCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    // Remove selected class from all cards
+                    investorTypeCards.forEach(c => c.classList.remove('selected'));
+                    
+                    // Add selected class to clicked card
+                    this.classList.add('selected');
+                    
+                    // Enable continue button
+                    step1Continue.removeAttribute('disabled');
+                });
+            });
+            
+            // Step 2: Invoice Selection
+            const invoiceRows = document.querySelectorAll('.invoice-table tbody tr');
+            const fundInvoiceBtn = document.getElementById('fund-invoice');
+            
+            invoiceRows.forEach(row => {
+                row.addEventListener('click', function() {
+                    // Remove selected class from all rows
+                    invoiceRows.forEach(r => r.classList.remove('selected'));
+                    
+                    // Add selected class to clicked row
+                    this.classList.add('selected');
+                    
+                    // Enable fund invoice button
+                    fundInvoiceBtn.removeAttribute('disabled');
+                });
+            });
+            
+            // Navigation between steps
+            step1Continue.addEventListener('click', function() {
+                goToStep(2);
+            });
+            
+            fundInvoiceBtn.addEventListener('click', function() {
+                goToStep(3);
+            });
+            
+            document.getElementById('accept-funding').addEventListener('click', function() {
+                goToStep(4);
+            });
+            
+            document.getElementById('decline-funding').addEventListener('click', function() {
+                goToStep(2);
+            });
+            
+            document.getElementById('simulate-payout').addEventListener('click', function() {
+                goToStep(5);
+            });
+            
+            document.getElementById('reinvest').addEventListener('click', function() {
+                goToStep(6);
+            });
+            
+            document.getElementById('withdraw').addEventListener('click', function() {
+                goToStep(6);
+            });
+            
+            function goToStep(stepNumber) {
+                // Hide all step content
+                document.querySelectorAll('.step-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                // Show selected step content
+                document.getElementById(`step-${stepNumber}-content`).classList.add('active');
+                
+                // Update progress bar
+                document.querySelectorAll('.progress-step').forEach((step, index) => {
+                    if (index + 1 < stepNumber) {
+                        step.classList.add('completed');
+                        step.classList.remove('active');
+                    } else if (index + 1 === stepNumber) {
+                        step.classList.add('active');
+                        step.classList.remove('completed');
+                    } else {
+                        step.classList.remove('active', 'completed');
+                    }
+                });
+                
+                // Scroll to top of the step
+                window.scrollTo({
+                    top: document.querySelector('.progress-bar').offsetTop - 100,
+                    behavior: 'smooth'
+                });
+            }
+            
+            // Simulate countdown timer (for demo purposes)
+            let days = 14;
+            const countdownInterval = setInterval(() => {
+                if (document.querySelector('.countdown-value')) {
+                    document.querySelector('.countdown-value').textContent = days;
+                    days -= 1;
+                    
+                    if (days < 0) {
+                        clearInterval(countdownInterval);
+                        if (document.getElementById('step-4-content').classList.contains('active')) {
+                            goToStep(5);
+                        }
+                    }
+                }
+            }, 3000); // Update every 3 seconds for demo
+        });
+    </script>
+</body>
+</html>
